@@ -26,10 +26,18 @@ const EmptyState = () => (
 );
 
 const ChatWindow = ({ onOpenSidebar = () => {}, onOpenResumeUpload = () => {} }) => {
-  const { messages, isTyping, isStreaming, streamingText, progress, sendMessage } = useChat();
+  const { messages, isTyping, isStreaming, streamingText, progress, sendMessage, activeChatId } = useChat();
   const bottomRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const stickToBottomRef = useRef(true);
+  // Switching chats should always jump to the bottom instantly, regardless of where the
+  // user had scrolled to in the previously open chat.
+  const chatSwitchedRef = useRef(false);
+
+  useEffect(() => {
+    stickToBottomRef.current = true;
+    chatSwitchedRef.current = true;
+  }, [activeChatId]);
 
   const handleScroll = () => {
     const el = scrollContainerRef.current;
@@ -40,7 +48,9 @@ const ChatWindow = ({ onOpenSidebar = () => {}, onOpenResumeUpload = () => {} })
 
   useEffect(() => {
     if (!stickToBottomRef.current) return;
-    bottomRef.current?.scrollIntoView({ behavior: isStreaming ? 'auto' : 'smooth' });
+    const behavior = chatSwitchedRef.current || isStreaming ? 'auto' : 'smooth';
+    chatSwitchedRef.current = false;
+    bottomRef.current?.scrollIntoView({ behavior });
   }, [messages, streamingText, isTyping, progress, isStreaming]);
 
   const isBusy = isTyping || isStreaming || (progress && progress.stage !== 'done');
