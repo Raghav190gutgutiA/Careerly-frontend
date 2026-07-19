@@ -48,9 +48,13 @@ const ChatWindow = ({ onOpenSidebar = () => {}, onOpenResumeUpload = () => {} })
 
   useEffect(() => {
     if (!stickToBottomRef.current) return;
+    // Switching chats briefly renders the empty state (messages cleared before the fetch
+    // resolves), so bottomRef isn't mounted yet - skip without consuming chatSwitchedRef,
+    // otherwise the real jump-to-bottom once messages load loses its 'auto' behavior.
+    if (!bottomRef.current) return;
     const behavior = chatSwitchedRef.current || isStreaming ? 'auto' : 'smooth';
     chatSwitchedRef.current = false;
-    bottomRef.current?.scrollIntoView({ behavior });
+    bottomRef.current.scrollIntoView({ behavior });
   }, [messages, streamingText, isTyping, progress, isStreaming]);
 
   const isBusy = isTyping || isStreaming || (progress && progress.stage !== 'done');

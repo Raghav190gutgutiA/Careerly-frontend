@@ -46,4 +46,6 @@ export const ROLE_FALLBACK_INTENTS = new Set([
 
 // These Quick Actions only make sense against an actual resume (there's no JD/role fallback
 // for them, unlike ROLE_FALLBACK_INTENTS) - disabled in the UI until one is uploaded.
-export const RESUME_REQUIRED_INTENTS = new Set(['resume_analysis', 'ats_review']);
+// resume_improvement is technically JD-fallback capable server-side, but is kept disabled
+// here without a resume per product decision (UI-only restriction).
+export const RESUME_REQUIRED_INTENTS = new Set(['resume_analysis', 'ats_review', 'resume_improvement']);
