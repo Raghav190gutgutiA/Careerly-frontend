@@ -3,7 +3,7 @@ import { FiMessageCircle, FiTrash2 } from 'react-icons/fi';
 import { useChat } from '../../hooks/useChat.js';
 import { truncate } from '../../utils/formatters.js';
 
-const ChatHistoryList = () => {
+const ChatHistoryList = ({ onSelect = () => {} }) => {
   const { chats, activeChatId, selectChat, removeChat } = useChat();
 
   if (chats.length === 0) {
@@ -23,7 +23,10 @@ const ChatHistoryList = () => {
             className="group relative"
           >
             <button
-              onClick={() => selectChat(chat._id)}
+              onClick={() => {
+                selectChat(chat._id);
+                onSelect();
+              }}
               className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition ${
                 activeChatId === chat._id
                   ? 'bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300'

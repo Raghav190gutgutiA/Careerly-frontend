@@ -51,7 +51,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       </motion.button>
 
       <div className="min-h-0 flex-1 overflow-y-auto pr-1">
-        <ChatHistoryList />
+        <ChatHistoryList onSelect={onClose} />
       </div>
 
       <div className="mt-3 flex flex-col gap-0.5 border-t border-slate-200 pt-3 dark:border-slate-700">
